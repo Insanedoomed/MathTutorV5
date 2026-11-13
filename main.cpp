@@ -26,6 +26,8 @@ string GetUserName();
 
 int GetNumericValue();
 
+string AskToPlayAgain();
+
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
 } // void = returns nothing, it only prints
@@ -68,9 +70,9 @@ int main() {
     string userName; // User's name
     string userInput = "?"; //User input
 
- DisplayGameIntro();
+DisplayGameIntro();
 
- GetUserName();
+userName = GetUserName();
 
 
     // start of loop
@@ -135,7 +137,7 @@ int main() {
             cout << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << endl; // Asks question
             cout << endl;
 
-    GetNumericValue();
+GetNumericValue();
 
             // if user right, then it adds one to total correct
             if (userAnswer == correctAns) {
@@ -206,21 +208,7 @@ int main() {
 
         getline(cin, userInput); // Clears user input
 
-        while (true) {
-            // asks the user if they want another question
-            cout << "Would you like another question, Apprentice? (y=yes/n=no)" << endl;
-            getline(cin, userInput);
-
-            for (int i = 0; i < userInput.length(); i++) {
-                userInput[i] = tolower(userInput[i]);
-            }
-            // user chooses yes or no
-            if (userInput == "y" || userInput == "yes" ||
-                userInput == "n" || userInput == "no") {
-                break;
-            }
-            cout << "Please enter y, yes, n, no" << endl;
-        }
+userInput = AskToPlayAgain();
     } while (userInput == "y" || userInput == "yes"); // User's answer to the yes or no
     // ---------- Summary box ----------
 
@@ -333,10 +321,9 @@ int main() {
     return 0;
 } // end of main
 //**********************************************************************************************************************
- //* Display the game intro and some jokes
+//* Display the game intro and some jokes
 // * ********************************************************************************************************************
-void DisplayGameIntro()
-{
+void DisplayGameIntro() {
     //Display the program's header
     cout <<
             "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
@@ -369,10 +356,9 @@ void DisplayGameIntro()
             "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
             << endl;
     return;
-}// end of DisplayGameIntro
+} // end of DisplayGameIntro
 
 string GetUserName() {
-
     string userName = "?";
     //obtaining user's name and welcoming the user
     cout << "What is your name young apprentice?" << endl;
@@ -385,7 +371,7 @@ string GetUserName() {
     cout << " you must first prove your mind is sharp." << endl;
     cout << endl;
     return userName;
-}// end of get userName
+} // end of get userName
 int GetNumericValue() {
     int userAnswer;
     //Start of Loop that loops until the user enters a valid input
@@ -394,7 +380,25 @@ int GetNumericValue() {
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignores the max input, up to '\n'
         cout << "Invalid answer apprentice!" << endl;
         cout << "Please enter a number (like 1,2,3), Apprentice!" << endl;
-        return userAnswer;
-    } // end of loop that handles correct user data
-}
+    }
+    return userAnswer;
+} // end of loop that handles correct user data
+string AskToPlayAgain() {
+    string userInput = "?";
+    while (true) {
+        // asks the user if they want another question
+        cout << "Would you like another question, Apprentice? (y=yes/n=no)" << endl;
+        getline(cin, userInput);
 
+        for (int i = 0; i < userInput.length(); i++) {
+            userInput[i] = tolower(userInput[i]);
+        }
+        // user chooses yes or no
+        if (userInput == "y" || userInput == "yes" ||
+            userInput == "n" || userInput == "no") {
+            return userInput;
+        }
+        cout << "Please enter y, yes, n, no" << endl;
+
+    }
+}
