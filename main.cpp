@@ -28,17 +28,21 @@ int GetNumericValue();
 
 string AskToPlayAgain();
 
+void DisplaySummaryReport();
+
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
 } // void = returns nothing, it only prints
+
+const int MAX_ATTEMPTS = 3; // Our max attempts; stays the same throughout program
+const int LEVEL_RANGE = 10; // Starting range of 1-10; adds ten each level up
+const int BOX_INNER = 40; // number of characters between the two | borders
 
 //start of the main function
 int main() {
     //initializing variables
     srand(time(0)); // Seed first; used to randomize the numeric operator (+,-,*,/)
-    const int MAX_ATTEMPTS = 3; // Our max attempts; stays the same throughout program
-    const int LEVEL_RANGE = 10; // Starting range of 1-10; adds ten each level up
-    const int BOX_INNER = 40; // number of characters between the two | borders
+
 
     enum MathType { MT_ADD = 1, MT_SUB = 2, MT_MUL = 3, MT_DIV = 4 }; // Our Enum for all the problems
 
@@ -210,6 +214,124 @@ GetNumericValue();
 
 userInput = AskToPlayAgain();
     } while (userInput == "y" || userInput == "yes"); // User's answer to the yes or no
+
+    DisplaySummaryReport();
+
+    cout << "Keep Calm and do math!" << endl; // closing messages printed outside the box
+
+    cout << "This is MathTutorV4, thanks for playing!" << endl;
+    cout << "Thank you this is all for now!" << endl;
+
+    return 0;
+} // end of main
+//**********************************************************************************************************************
+//* Display the game intro and some jokes
+// * ********************************************************************************************************************
+void DisplayGameIntro() {
+    //Display the program's header
+    cout <<
+            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
+            << endl;
+    cout << "                       {*} Welcome to the tower of the wizard of magical math tutoring! (V5) {*}" << endl;
+    cout << R"(
+,---.    ,---.   ____   ,---------. .---.  .---.    .--.      .--..-./`)  ____..--'   ____    .-------.     ______
+|    \  /    | .'  __ `.\          \|   |  |_ _|    |  |_     |  |\ .-.')|        | .'  __ `. |  _ _   \   |    _ `''.
+|  ,  \/  ,  |/   '  \  \`--.  ,---'|   |  ( ' )    | _( )_   |  |/ `-' \|   .-'  '/   '  \  \| ( ' )  |   | _ | ) _  \
+|  |\_   /|  ||___|  /  |   |   \   |   '-(_{;}_)   |(_ o _)  |  | `-'`"`|.-'.'   /|___|  /  ||(_ o _) /   |( ''_'  ) |
+|  _( )_/ |  |   _.-`   |   :_ _:   |      (_,_)    | (_,_) \ |  | .---.    /   _/    _.-`   || (_,_).' __ | . (_) `. |
+| (_ o _) |  |.'   _    |   (_I_)   | _ _--.   |    |  |/    \|  | |   |  .'._( )_ .'   _    ||  |\ \  |  ||(_    ._) '
+|  (_,_)  |  ||  _( )_  |  (_(=)_)  |( ' ) |   |    |  '  /\  `  | |   |.'  (_'o._)|  _( )_  ||  | \ `'   /|  (_.\.' /
+|  |      |  |\ (_ o _) /   (_I_)   (_{;}_)|   |    |    /  \    | |   ||    (_,_)|\ (_ o _) /|  |  \    / |       .'
+'--'      '--' '.(_,_).'    '---'   '(_,_) '---'    `---'    `---` '---'|_________| '.(_,_).' ''-'   `'-'  '-----'`
+
+                                                                                                                                 )"
+            << endl;
+    //Display the program's jokes
+    cout <<
+            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
+            << endl;
+    cout << R"(A wise wizards words:
+        (*) What's a wizard's favorite school subject? spell-gebra!
+        (*) Why did the sorcerer break his calculator? He wanted to do math-a-magics in his head!
+        (*) What is a witch's favorite shape? A Hex-agon!
+        (*) What do you call a snake that is 3.14 feet long? A Pi-thon!)" << endl << endl;
+
+    cout <<
+            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
+            << endl;
+    return;
+} // end of DisplayGameIntro
+
+string GetUserName() {
+    string userName = "?";
+    //obtaining user's name and welcoming the user
+    cout << "What is your name young apprentice?" << endl;
+    getline(cin, userName); // handle for spaces in a person's name
+    cout << "" << endl;
+    //math question and answer
+    cout << "Ah... " << userName <<
+            "! So you have finally found me. If you truly seek the knowledge hidden within these ancient halls," <<
+            endl;
+    cout << " you must first prove your mind is sharp." << endl;
+    cout << endl;
+    return userName;
+} // end of get userName
+int GetNumericValue() {
+    int userAnswer;
+    //Start of Loop that loops until the user enters a valid input
+    while (!(cin >> userAnswer)) {
+        cin.clear(); // clears the cin error flag
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignores the max input, up to '\n'
+        cout << "Invalid answer apprentice!" << endl;
+        cout << "Please enter a number (like 1,2,3), Apprentice!" << endl;
+    }
+    return userAnswer;
+} // end of loop that handles correct user data
+string AskToPlayAgain() {
+    string userInput = "?";
+    while (true) {
+        // asks the user if they want another question
+        cout << "Would you like another question, Apprentice? (y=yes/n=no)" << endl;
+        getline(cin, userInput);
+
+        for (int i = 0; i < userInput.length(); i++) {
+            userInput[i] = tolower(userInput[i]);
+        }
+        // user chooses yes or no
+        if (userInput == "y" || userInput == "yes" ||
+            userInput == "n" || userInput == "no") {
+            return userInput;
+        }
+        cout << "Please enter y, yes, n, no" << endl;
+
+    }
+}
+
+void DisplaySummaryReport() {
+
+    vector<vector<int> > questions; // Vector for our tabel. Sets questions as a holder
+
+    int correctAns; // The correct answer
+
+    int rightNum = 0; // the 2nd random number between 1 and level change
+    int leftNum = 0; // the 1st random number between 1 and level change
+    int temp = 0; // Uses to swap two values
+
+
+    int attempt = 0; // Current attempt number
+
+    int mathLevel = 1; // Current Math level
+    char mathSymbol; // {+, -, *, /}
+    int totalIncorrect = 0; // Current number of incorrect questions; used later for leveling down
+    int totalCorrect = 0; // Current number of Correct questions; used for later for leveling up
+
+    int average = 0; // Out average which is Totalcorrect dived by how many questions there were
+    int totalQuestions = 0; // Totalquestions answered
+
+    string border = " |" + string(BOX_INNER, '-') + "|"; // builds the box's top/bottom line: " |" + 40 dashes + "|"
+    string userName; // User's name
+    string userInput = "?"; //User input
+
     // ---------- Summary box ----------
 
     boxLine("    Math Tutor Summary Report", BOX_INNER);
@@ -311,94 +433,5 @@ userInput = AskToPlayAgain();
         cout << border << endl;
         boxLine("There is work to be done! Grade: F", BOX_INNER);
         cout << border << endl;
-    }
-
-    cout << "Keep Calm and do math!" << endl; // closing messages printed outside the box
-
-    cout << "This is MathTutorV4, thanks for playing!" << endl;
-    cout << "Thank you this is all for now!" << endl;
-
-    return 0;
-} // end of main
-//**********************************************************************************************************************
-//* Display the game intro and some jokes
-// * ********************************************************************************************************************
-void DisplayGameIntro() {
-    //Display the program's header
-    cout <<
-            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
-            << endl;
-    cout << "                       {*} Welcome to the tower of the wizard of magical math tutoring! (V5) {*}" << endl;
-    cout << R"(
-,---.    ,---.   ____   ,---------. .---.  .---.    .--.      .--..-./`)  ____..--'   ____    .-------.     ______
-|    \  /    | .'  __ `.\          \|   |  |_ _|    |  |_     |  |\ .-.')|        | .'  __ `. |  _ _   \   |    _ `''.
-|  ,  \/  ,  |/   '  \  \`--.  ,---'|   |  ( ' )    | _( )_   |  |/ `-' \|   .-'  '/   '  \  \| ( ' )  |   | _ | ) _  \
-|  |\_   /|  ||___|  /  |   |   \   |   '-(_{;}_)   |(_ o _)  |  | `-'`"`|.-'.'   /|___|  /  ||(_ o _) /   |( ''_'  ) |
-|  _( )_/ |  |   _.-`   |   :_ _:   |      (_,_)    | (_,_) \ |  | .---.    /   _/    _.-`   || (_,_).' __ | . (_) `. |
-| (_ o _) |  |.'   _    |   (_I_)   | _ _--.   |    |  |/    \|  | |   |  .'._( )_ .'   _    ||  |\ \  |  ||(_    ._) '
-|  (_,_)  |  ||  _( )_  |  (_(=)_)  |( ' ) |   |    |  '  /\  `  | |   |.'  (_'o._)|  _( )_  ||  | \ `'   /|  (_.\.' /
-|  |      |  |\ (_ o _) /   (_I_)   (_{;}_)|   |    |    /  \    | |   ||    (_,_)|\ (_ o _) /|  |  \    / |       .'
-'--'      '--' '.(_,_).'    '---'   '(_,_) '---'    `---'    `---` '---'|_________| '.(_,_).' ''-'   `'-'  '-----'`
-
-                                                                                                                                 )"
-            << endl;
-    //Display the program's jokes
-    cout <<
-            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
-            << endl;
-    cout << R"(A wise wizards words:
-        (*) What's a wizard's favorite school subject? spell-gebra!
-        (*) Why did the sorcerer break his calculator? He wanted to do math-a-magics in his head!
-        (*) What is a witch's favorite shape? A Hex-agon!
-        (*) What do you call a snake that is 3.14 feet long? A Pi-thon!)" << endl << endl;
-
-    cout <<
-            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
-            << endl;
-    return;
-} // end of DisplayGameIntro
-
-string GetUserName() {
-    string userName = "?";
-    //obtaining user's name and welcoming the user
-    cout << "What is your name young apprentice?" << endl;
-    getline(cin, userName); // handle for spaces in a person's name
-    cout << "" << endl;
-    //math question and answer
-    cout << "Ah... " << userName <<
-            "! So you have finally found me. If you truly seek the knowledge hidden within these ancient halls," <<
-            endl;
-    cout << " you must first prove your mind is sharp." << endl;
-    cout << endl;
-    return userName;
-} // end of get userName
-int GetNumericValue() {
-    int userAnswer;
-    //Start of Loop that loops until the user enters a valid input
-    while (!(cin >> userAnswer)) {
-        cin.clear(); // clears the cin error flag
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignores the max input, up to '\n'
-        cout << "Invalid answer apprentice!" << endl;
-        cout << "Please enter a number (like 1,2,3), Apprentice!" << endl;
-    }
-    return userAnswer;
-} // end of loop that handles correct user data
-string AskToPlayAgain() {
-    string userInput = "?";
-    while (true) {
-        // asks the user if they want another question
-        cout << "Would you like another question, Apprentice? (y=yes/n=no)" << endl;
-        getline(cin, userInput);
-
-        for (int i = 0; i < userInput.length(); i++) {
-            userInput[i] = tolower(userInput[i]);
-        }
-        // user chooses yes or no
-        if (userInput == "y" || userInput == "yes" ||
-            userInput == "n" || userInput == "no") {
-            return userInput;
-        }
-        cout << "Please enter y, yes, n, no" << endl;
-
     }
 }
