@@ -24,7 +24,7 @@ void DisplayGameIntro();
 
 string GetUserName();
 
-
+int GetNumericValue();
 
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
@@ -135,14 +135,7 @@ int main() {
             cout << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << endl; // Asks question
             cout << endl;
 
-            //Start of Loop that loops until the user enters a valid input
-            while (!(cin >> userAnswer)) {
-                cin.clear(); // clears the cin error flag
-                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignores the max input, up to '\n'
-                cout << "Invalid answer apprentice!" << endl;
-                cout << "Please enter a number (like 1,2,3), Apprentice!" << endl;
-                cout << userName << " what is " << leftNum << mathSymbol << rightNum << "?" << endl;
-            } // end of loop that handles correct user data
+    GetNumericValue();
 
             // if user right, then it adds one to total correct
             if (userAnswer == correctAns) {
@@ -393,4 +386,15 @@ string GetUserName() {
     cout << endl;
     return userName;
 }// end of get userName
+int GetNumericValue() {
+    int userAnswer;
+    //Start of Loop that loops until the user enters a valid input
+    while (!(cin >> userAnswer)) {
+        cin.clear(); // clears the cin error flag
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignores the max input, up to '\n'
+        cout << "Invalid answer apprentice!" << endl;
+        cout << "Please enter a number (like 1,2,3), Apprentice!" << endl;
+        return userAnswer;
+    } // end of loop that handles correct user data
+}
 
