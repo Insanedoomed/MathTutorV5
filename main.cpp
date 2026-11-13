@@ -28,9 +28,9 @@ int GetNumericValue();
 
 string AskToPlayAgain();
 
-void DisplaySummaryReport();
+void DisplaySummaryReport(const vector<vector<int> > &questions);
 
-bool GiveThreeAttempts(string userName, vector<int> questionNumber);
+bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol, int rightNum, int correctAns, vector<int> &row);
 
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
@@ -52,8 +52,6 @@ int main() {
 
     vector<vector<int> > questions; // Vector for our tabel. Sets questions as a holder
 
-
-    int userAnswer; // The user's answer to the math question
     int correctAns; // The correct answer
 
     int rightNum = 0; // the 2nd random number between 1 and level change
@@ -61,16 +59,12 @@ int main() {
     int temp = 0; // Uses to swap two values
 
     int questionNumber = 0; // Current question number
-    int attempt = 0; // Current attempt number
     int LevelRange = LEVEL_RANGE; // turns it into a variable that later is used to check for equality
 
     int mathLevel = 1; // Current Math level
     char mathSymbol; // {+, -, *, /}
     int totalIncorrect = 0; // Current number of incorrect questions; used later for leveling down
     int totalCorrect = 0; // Current number of Correct questions; used for later for leveling up
-
-    int average = 0; // Out average which is Totalcorrect dived by how many questions there were
-    int totalQuestions = 0; // Totalquestions answered
 
     string border = " |" + string(BOX_INNER, '-') + "|"; // builds the box's top/bottom line: " |" + 40 dashes + "|"
     string userName; // User's name
@@ -132,37 +126,14 @@ userName = GetUserName();
         //Storing the math level, left number, math symbol, right number, and correct answer
         vector<int> row = {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
 
-isCorrect = GiveThreeAttempts(userName, questionNumber);
+isCorrect = GiveThreeAttempts(userName, questionNumber, mathLevel, leftNum, mathSymbol, rightNum, correctAns, row);
+        if (isCorrect) {
+            totalCorrect++;
+        } else {
+            totalIncorrect++;
+        }
 
-GetNumericValue();
-
-            // if user right, then it adds one to total correct
-            if (userAnswer == correctAns) {
-                cout << "Good job! You Got The Question Right!" << endl;
-                cout << endl;
-                totalCorrect++;
-                row.push_back(i); //add the number of attempts to the end of the row using value i.
-                break;
-            } else {
-                totalIncorrect++;
-                if (i < MAX_ATTEMPTS) {
-                    // IF wrong, your number of attempts goes up
-                    cout << "Not quite, apprentice!" << endl;
-                    cout << endl;
-                } else {
-                    // Runs if the user gets three incorrect
-                    cout << "I'm So Disappointed In You Apprentice..." << endl;
-                    cout << "You should've gotten that right..." << endl;
-                    cout << " |----------------------------------|" << endl;
-                    cout << " | CorrectAnswer: " << left << setw(18) << correctAns << "|" << endl;
-                    cout << " |----------------------------------|" << endl;
-                    cout << endl;
-                    row.push_back(0); // an error value 0 when out of attempts
-                }
-            }
-        } // End of For
-        questions.push_back(row); // add the data of row to the end of the 2D vectors
-
+        questions.push_back(row); // add the data of row to the end of the 2D vector
         // Leveling up
         if (totalCorrect >= 3) {
             mathLevel++;
@@ -205,10 +176,13 @@ GetNumericValue();
 
         getline(cin, userInput); // Clears user input
 
-userInput = AskToPlayAgain();
+        userInput = AskToPlayAgain();
     } while (userInput == "y" || userInput == "yes"); // User's answer to the yes or no
 
-    DisplaySummaryReport();
+
+
+
+    DisplaySummaryReport(questions);
 
     cout << "Keep Calm and do math!" << endl; // closing messages printed outside the box
 
@@ -300,30 +274,23 @@ string AskToPlayAgain() {
     }
 }
 
-void DisplaySummaryReport() {
+void DisplaySummaryReport(const vector<vector<int> > &questions) {
 
-    vector<vector<int> > questions; // Vector for our tabel. Sets questions as a holder
+    int correctAns;     // The correct answer
+    int leftNum = 0;    // 1st number
+    int rightNum = 0;   // 2nd number
+    int mathLevel = 1;  // level
+    char mathSymbol;    // {+, -, *, /}
+    int attempt = 0;    // attempts it took (0 = failed)
 
-    int correctAns; // The correct answer
+    int totalCorrect = 0;
+    int totalIncorrect = 0;
+    int totalQuestions = 0;
+    int average = 0;
 
-    int rightNum = 0; // the 2nd random number between 1 and level change
-    int leftNum = 0; // the 1st random number between 1 and level change
-    int temp = 0; // Uses to swap two values
+    string border = " |" + string(BOX_INNER, '-') + "|";
 
 
-    int attempt = 0; // Current attempt number
-
-    int mathLevel = 1; // Current Math level
-    char mathSymbol; // {+, -, *, /}
-    int totalIncorrect = 0; // Current number of incorrect questions; used later for leveling down
-    int totalCorrect = 0; // Current number of Correct questions; used for later for leveling up
-
-    int average = 0; // Out average which is Totalcorrect dived by how many questions there were
-    int totalQuestions = 0; // Totalquestions answered
-
-    string border = " |" + string(BOX_INNER, '-') + "|"; // builds the box's top/bottom line: " |" + 40 dashes + "|"
-    string userName; // User's name
-    string userInput = "?"; //User input
 
     // ---------- Summary box ----------
 
@@ -428,23 +395,40 @@ void DisplaySummaryReport() {
         cout << border << endl;
     }
 }
-bool GiveThreeAttempts() {
-    // Start of for loop
-    string userName;
-    int questionNumber;
-    int mathLevel;
-    int leftNum;
-    int rightNum;
-    string mathSymbol;
+bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol, int rightNum, int correctAns, vector<int> &row) {
+    int userAnswer = 0;
+
     for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-        // If attempt is less than or equal to MAX_ATTEMPTS, it will add one attempt
         cout << " |----------------------------------|" << endl;
         cout << " | Question: " << left << setw(23) << questionNumber << "|" << endl;
-        cout << " | Attempts: " << i << " out of " << left << setw(14) << MAX_ATTEMPTS << "|" << endl;;
+        cout << " | Attempts: " << i << " out of " << left << setw(14) << MAX_ATTEMPTS << "|" << endl;
         cout << " | MathLevel: " << left << setw(22) << mathLevel << "|" << endl;
         cout << " |----------------------------------|" << endl;
         cout << endl;
-        cout << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << endl; // Asks question
+        cout << userName << ", what is " << leftNum << " " << mathSymbol << " " << rightNum << "?" << endl;
         cout << endl;
+
+        userAnswer = GetNumericValue();
+
+        if (userAnswer == correctAns) {
+            cout << "Good job! You Got The Question Right!" << endl;
+            cout << endl;
+            row.push_back(i); // number of attempts it took
+            return true;
+        }
+
+        if (i < MAX_ATTEMPTS) {
+            cout << "Not quite, apprentice!" << endl;
+            cout << endl;
+        } else {
+            cout << "I'm So Disappointed In You Apprentice..." << endl;
+            cout << "You should've gotten that right..." << endl;
+            cout << " |----------------------------------|" << endl;
+            cout << " | CorrectAnswer: " << left << setw(18) << correctAns << "|" << endl;
+            cout << " |----------------------------------|" << endl;
+            cout << endl;
+            row.push_back(0); // 0 = out of attempts
+        }
     }
+    return false;
 }
