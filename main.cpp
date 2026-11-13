@@ -22,6 +22,8 @@ using namespace std; //sets standard namespace
 
 void DisplayGameIntro();
 
+string GetUserName();
+
 
 
 void boxLine(const string &text, int width) {
@@ -68,16 +70,8 @@ int main() {
 
  DisplayGameIntro();
 
-    //obtaining user's name and welcoming the user
-    cout << "What is your name young apprentice?" << endl;
-    getline(cin, userName); // handle for spaces in a person's name
-    cout << "" << endl;
-    //math question and answer
-    cout << "Ah... " << userName <<
-            "! So you have finally found me. If you truly seek the knowledge hidden within these ancient halls," <<
-            endl;
-    cout << " you must first prove your mind is sharp." << endl;
-    cout << endl;
+ GetUserName();
+
 
     // start of loop
     do {
@@ -383,3 +377,20 @@ void DisplayGameIntro()
             << endl;
     return;
 }// end of DisplayGameIntro
+
+string GetUserName() {
+
+    string userName = "?";
+    //obtaining user's name and welcoming the user
+    cout << "What is your name young apprentice?" << endl;
+    getline(cin, userName); // handle for spaces in a person's name
+    cout << "" << endl;
+    //math question and answer
+    cout << "Ah... " << userName <<
+            "! So you have finally found me. If you truly seek the knowledge hidden within these ancient halls," <<
+            endl;
+    cout << " you must first prove your mind is sharp." << endl;
+    cout << endl;
+    return userName;
+}// end of get userName
+
