@@ -20,6 +20,10 @@ and then it outputs an end of program message.
 
 using namespace std; //sets standard namespace
 
+void DisplayGameIntro();
+
+
+
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
 } // void = returns nothing, it only prints
@@ -62,37 +66,7 @@ int main() {
     string userName; // User's name
     string userInput = "?"; //User input
 
-    //Display the program's header
-    cout <<
-            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
-            << endl;
-    cout << "                       {*} Welcome to the tower of the wizard of magical math tutoring! (V4) {*}" << endl;
-    cout << R"(
-,---.    ,---.   ____   ,---------. .---.  .---.    .--.      .--..-./`)  ____..--'   ____    .-------.     ______
-|    \  /    | .'  __ `.\          \|   |  |_ _|    |  |_     |  |\ .-.')|        | .'  __ `. |  _ _   \   |    _ `''.
-|  ,  \/  ,  |/   '  \  \`--.  ,---'|   |  ( ' )    | _( )_   |  |/ `-' \|   .-'  '/   '  \  \| ( ' )  |   | _ | ) _  \
-|  |\_   /|  ||___|  /  |   |   \   |   '-(_{;}_)   |(_ o _)  |  | `-'`"`|.-'.'   /|___|  /  ||(_ o _) /   |( ''_'  ) |
-|  _( )_/ |  |   _.-`   |   :_ _:   |      (_,_)    | (_,_) \ |  | .---.    /   _/    _.-`   || (_,_).' __ | . (_) `. |
-| (_ o _) |  |.'   _    |   (_I_)   | _ _--.   |    |  |/    \|  | |   |  .'._( )_ .'   _    ||  |\ \  |  ||(_    ._) '
-|  (_,_)  |  ||  _( )_  |  (_(=)_)  |( ' ) |   |    |  '  /\  `  | |   |.'  (_'o._)|  _( )_  ||  | \ `'   /|  (_.\.' /
-|  |      |  |\ (_ o _) /   (_I_)   (_{;}_)|   |    |    /  \    | |   ||    (_,_)|\ (_ o _) /|  |  \    / |       .'
-'--'      '--' '.(_,_).'    '---'   '(_,_) '---'    `---'    `---` '---'|_________| '.(_,_).' ''-'   `'-'  '-----'`
-
-                                                                                                                                 )"
-            << endl;
-    //Display the program's jokes
-    cout <<
-            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
-            << endl;
-    cout << R"(A wise wizards words:
-        (*) What's a wizard's favorite school subject? spell-gebra!
-        (*) Why did the sorcerer break his calculator? He wanted to do math-a-magics in his head!
-        (*) What is a witch's favorite shape? A Hex-agon!
-        (*) What do you call a snake that is 3.14 feet long? A Pi-thon!)" << endl << endl;
-
-    cout <<
-            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
-            << endl;
+ DisplayGameIntro();
 
     //obtaining user's name and welcoming the user
     cout << "What is your name young apprentice?" << endl;
@@ -370,4 +344,42 @@ int main() {
     cout << "Thank you this is all for now!" << endl;
 
     return 0;
-}
+} // end of main
+//**********************************************************************************************************************
+ //* Display the game intro and some jokes
+// * ********************************************************************************************************************
+void DisplayGameIntro()
+{
+    //Display the program's header
+    cout <<
+            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
+            << endl;
+    cout << "                       {*} Welcome to the tower of the wizard of magical math tutoring! (V5) {*}" << endl;
+    cout << R"(
+,---.    ,---.   ____   ,---------. .---.  .---.    .--.      .--..-./`)  ____..--'   ____    .-------.     ______
+|    \  /    | .'  __ `.\          \|   |  |_ _|    |  |_     |  |\ .-.')|        | .'  __ `. |  _ _   \   |    _ `''.
+|  ,  \/  ,  |/   '  \  \`--.  ,---'|   |  ( ' )    | _( )_   |  |/ `-' \|   .-'  '/   '  \  \| ( ' )  |   | _ | ) _  \
+|  |\_   /|  ||___|  /  |   |   \   |   '-(_{;}_)   |(_ o _)  |  | `-'`"`|.-'.'   /|___|  /  ||(_ o _) /   |( ''_'  ) |
+|  _( )_/ |  |   _.-`   |   :_ _:   |      (_,_)    | (_,_) \ |  | .---.    /   _/    _.-`   || (_,_).' __ | . (_) `. |
+| (_ o _) |  |.'   _    |   (_I_)   | _ _--.   |    |  |/    \|  | |   |  .'._( )_ .'   _    ||  |\ \  |  ||(_    ._) '
+|  (_,_)  |  ||  _( )_  |  (_(=)_)  |( ' ) |   |    |  '  /\  `  | |   |.'  (_'o._)|  _( )_  ||  | \ `'   /|  (_.\.' /
+|  |      |  |\ (_ o _) /   (_I_)   (_{;}_)|   |    |    /  \    | |   ||    (_,_)|\ (_ o _) /|  |  \    / |       .'
+'--'      '--' '.(_,_).'    '---'   '(_,_) '---'    `---'    `---` '---'|_________| '.(_,_).' ''-'   `'-'  '-----'`
+
+                                                                                                                                 )"
+            << endl;
+    //Display the program's jokes
+    cout <<
+            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
+            << endl;
+    cout << R"(A wise wizards words:
+        (*) What's a wizard's favorite school subject? spell-gebra!
+        (*) Why did the sorcerer break his calculator? He wanted to do math-a-magics in his head!
+        (*) What is a witch's favorite shape? A Hex-agon!
+        (*) What do you call a snake that is 3.14 feet long? A Pi-thon!)" << endl << endl;
+
+    cout <<
+            "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
+            << endl;
+    return;
+}// end of DisplayGameIntro
