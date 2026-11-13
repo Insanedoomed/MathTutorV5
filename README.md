@@ -39,7 +39,7 @@ total questions, correct answer, incorrect answer, and percentage for correct an
 
 ## Maintainers
 [@Insanedoomed](https://github.com/Insanedoomed) Brayden Tolle  
-[@BarnabasHtoo](https://github.com/BarnabasHtoo) Saw Barnabas Thadoe Htoo
+[@JacobKarsky](https://github.com/BarnabasHtoo) Jacob Karsky
 
 ## New Concepts Used
 - Using 2D Vector to produce the summary report at the end.

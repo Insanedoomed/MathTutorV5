@@ -1,9 +1,9 @@
 /*****************************************************************************************************************************************************
 Program: MathTutorV4
-Programmers: Barnabas Htoo, and Brayden Tolle
+Programmers: Jacob Karsky, and Brayden Tolle
 Date: 10/30/2026
 Section 3: 12:00
-Github Repo:https://github.com/Insanedoomed/MathTutorV4
+Github Repo:https://github.com/Insanedoomed/MathTutorV5
 Description: A wizard/magic themed math tutor that displays the intro featuring
 ASCII art and jokes, it then asks a simple math question which is checked for correctness
 and then it outputs an end of program message.
