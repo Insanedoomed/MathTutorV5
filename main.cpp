@@ -30,6 +30,8 @@ string AskToPlayAgain();
 
 void DisplaySummaryReport();
 
+bool GiveThreeAttempts(string userName, vector<int> questionNumber);
+
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
 } // void = returns nothing, it only prints
@@ -73,6 +75,7 @@ int main() {
     string border = " |" + string(BOX_INNER, '-') + "|"; // builds the box's top/bottom line: " |" + 40 dashes + "|"
     string userName; // User's name
     string userInput = "?"; //User input
+    bool isCorrect = false;
 
 DisplayGameIntro();
 
@@ -129,17 +132,7 @@ userName = GetUserName();
         //Storing the math level, left number, math symbol, right number, and correct answer
         vector<int> row = {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
 
-        // Start of for loop
-        for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-            // If attempt is less than or equal to MAX_ATTEMPTS, it will add one attempt
-            cout << " |----------------------------------|" << endl;
-            cout << " | Question: " << left << setw(23) << questionNumber << "|" << endl;
-            cout << " | Attempts: " << i << " out of " << left << setw(14) << MAX_ATTEMPTS << "|" << endl;;
-            cout << " | MathLevel: " << left << setw(22) << mathLevel << "|" << endl;
-            cout << " |----------------------------------|" << endl;
-            cout << endl;
-            cout << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << endl; // Asks question
-            cout << endl;
+isCorrect = GiveThreeAttempts(userName, questionNumber);
 
 GetNumericValue();
 
@@ -433,5 +426,25 @@ void DisplaySummaryReport() {
         cout << border << endl;
         boxLine("There is work to be done! Grade: F", BOX_INNER);
         cout << border << endl;
+    }
+}
+bool GiveThreeAttempts() {
+    // Start of for loop
+    string userName;
+    int questionNumber;
+    int mathLevel;
+    int leftNum;
+    int rightNum;
+    string mathSymbol;
+    for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+        // If attempt is less than or equal to MAX_ATTEMPTS, it will add one attempt
+        cout << " |----------------------------------|" << endl;
+        cout << " | Question: " << left << setw(23) << questionNumber << "|" << endl;
+        cout << " | Attempts: " << i << " out of " << left << setw(14) << MAX_ATTEMPTS << "|" << endl;;
+        cout << " | MathLevel: " << left << setw(22) << mathLevel << "|" << endl;
+        cout << " |----------------------------------|" << endl;
+        cout << endl;
+        cout << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << endl; // Asks question
+        cout << endl;
     }
 }
