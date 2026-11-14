@@ -32,6 +32,8 @@ void DisplaySummaryReport(const vector<vector<int> > &questions);
 
 bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol, int rightNum, int correctAns, vector<int> &row);
 
+void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel);
+
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
 } // void = returns nothing, it only prints
@@ -135,44 +137,8 @@ isCorrect = GiveThreeAttempts(userName, questionNumber, mathLevel, leftNum, math
 
         questions.push_back(row); // add the data of row to the end of the 2D vector
         // Leveling up
-        if (totalCorrect >= 3) {
-            mathLevel++;
 
-            LevelRange += LEVEL_RANGE;
-            totalCorrect = 0; // clears it for next level.
-            totalIncorrect = 0; // clears it for next level.
-
-            questionNumber = 0; // Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 3
-
-            cout << "You have Advanced to the next level" << endl;
-            cout << " |----------------------------------|" << endl;
-            cout << " | NumUp: " << left << setw(26) << LevelRange << "|" << endl;
-            cout << " | LevelUp: " << left << setw(24) << mathLevel << "|" << endl;
-            cout << " |----------------------------------|" << endl;
-            cout << endl;
-        }
-        // leveling down
-        else if (totalIncorrect >= 3) {
-            if (LevelRange > LEVEL_RANGE) {
-                mathLevel--;
-
-                LevelRange -= LEVEL_RANGE;
-
-                totalCorrect = 0; // clears it for next level.
-                totalIncorrect = 0; // clears it for next level.
-                questionNumber = 0; // Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 2
-
-                cout << "You have Advanced down a level" << endl;
-                cout << " |----------------------------------|" << endl;
-                cout << " | NumDown: " << left << setw(24) << LevelRange << "|" << endl;
-                cout << " | LevelDown: " << left << setw(22) << mathLevel << "|" << endl;
-                cout << " |----------------------------------|" << endl;
-                cout << endl;
-            }
-
-            totalCorrect = 0; // clears total correct
-            totalIncorrect = 0; // clears total incorrect
-        }
+CheckForLevelRangeChange(totalCorrect, totalIncorrect, mathLevel);
 
         getline(cin, userInput); // Clears user input
 
@@ -431,4 +397,50 @@ bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel
         }
     }
     return false;
+}
+
+void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel) {
+
+    int questionNumber = 0; // Current question number
+    int LevelRange = LEVEL_RANGE; // turns it into a variable that later is used to check for equality
+
+
+    if (totalCorrect >= 3) {
+        mathLevel++;
+
+        LevelRange += LEVEL_RANGE;
+        totalCorrect = 0; // clears it for next level.
+        totalIncorrect = 0; // clears it for next level.
+
+        questionNumber = 0; // Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 3
+
+        cout << "You have Advanced to the next level" << endl;
+        cout << " |----------------------------------|" << endl;
+        cout << " | NumUp: " << left << setw(26) << LevelRange << "|" << endl;
+        cout << " | LevelUp: " << left << setw(24) << mathLevel << "|" << endl;
+        cout << " |----------------------------------|" << endl;
+        cout << endl;
+    }
+    // leveling down
+    else if (totalIncorrect >= 3) {
+        if (LevelRange > LEVEL_RANGE) {
+            mathLevel--;
+
+            LevelRange -= LEVEL_RANGE;
+
+            totalCorrect = 0; // clears it for next level.
+            totalIncorrect = 0; // clears it for next level.
+            questionNumber = 0; // Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 2
+
+            cout << "You have Advanced down a level" << endl;
+            cout << " |----------------------------------|" << endl;
+            cout << " | NumDown: " << left << setw(24) << LevelRange << "|" << endl;
+            cout << " | LevelDown: " << left << setw(22) << mathLevel << "|" << endl;
+            cout << " |----------------------------------|" << endl;
+            cout << endl;
+        }
+
+        totalCorrect = 0; // clears total correct
+        totalIncorrect = 0; // clears total incorrect
+    }
 }
