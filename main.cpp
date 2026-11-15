@@ -30,9 +30,10 @@ string AskToPlayAgain();
 
 void DisplaySummaryReport(const vector<vector<int> > &questions);
 
-bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol, int rightNum, int correctAns, vector<int> &row);
+bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol,
+                       int rightNum, int correctAns, vector<int> &row);
 
-void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel);
+void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange);
 
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
@@ -73,9 +74,9 @@ int main() {
     string userInput = "?"; //User input
     bool isCorrect = false;
 
-DisplayGameIntro();
+    DisplayGameIntro();
 
-userName = GetUserName();
+    userName = GetUserName();
 
 
     // start of loop
@@ -128,7 +129,8 @@ userName = GetUserName();
         //Storing the math level, left number, math symbol, right number, and correct answer
         vector<int> row = {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
 
-isCorrect = GiveThreeAttempts(userName, questionNumber, mathLevel, leftNum, mathSymbol, rightNum, correctAns, row);
+        isCorrect = GiveThreeAttempts(userName, questionNumber, mathLevel, leftNum, mathSymbol, rightNum, correctAns,
+                                      row);
         if (isCorrect) {
             totalCorrect++;
         } else {
@@ -136,16 +138,13 @@ isCorrect = GiveThreeAttempts(userName, questionNumber, mathLevel, leftNum, math
         }
 
         questions.push_back(row); // add the data of row to the end of the 2D vector
-        // Leveling up
 
-CheckForLevelRangeChange(totalCorrect, totalIncorrect, mathLevel);
+        CheckForLevelRangeChange(totalCorrect, totalIncorrect, mathLevel, LevelRange);
 
         getline(cin, userInput); // Clears user input
 
         userInput = AskToPlayAgain();
     } while (userInput == "y" || userInput == "yes"); // User's answer to the yes or no
-
-
 
 
     DisplaySummaryReport(questions);
@@ -236,18 +235,16 @@ string AskToPlayAgain() {
             return userInput;
         }
         cout << "Please enter y, yes, n, no" << endl;
-
     }
 }
 
 void DisplaySummaryReport(const vector<vector<int> > &questions) {
-
-    int correctAns;     // The correct answer
-    int leftNum = 0;    // 1st number
-    int rightNum = 0;   // 2nd number
-    int mathLevel = 1;  // level
-    char mathSymbol;    // {+, -, *, /}
-    int attempt = 0;    // attempts it took (0 = failed)
+    int correctAns; // The correct answer
+    int leftNum = 0; // 1st number
+    int rightNum = 0; // 2nd number
+    int mathLevel = 1; // level
+    char mathSymbol; // {+, -, *, /}
+    int attempt = 0; // attempts it took (0 = failed)
 
     int totalCorrect = 0;
     int totalIncorrect = 0;
@@ -255,7 +252,6 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
     int average = 0;
 
     string border = " |" + string(BOX_INNER, '-') + "|";
-
 
 
     // ---------- Summary box ----------
@@ -355,13 +351,16 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
         cout << border << endl;
         boxLine("Could be worse apprentice. Grade: F+", BOX_INNER);
         cout << border << endl;
-    } else if (average <= 50) {
+    } else {
         cout << border << endl;
         boxLine("There is work to be done! Grade: F", BOX_INNER);
         cout << border << endl;
     }
 }
-bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol, int rightNum, int correctAns, vector<int> &row) {
+
+
+bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol,
+                       int rightNum, int correctAns, vector<int> &row) {
     int userAnswer = 0;
 
     for (int i = 1; i <= MAX_ATTEMPTS; i++) {
@@ -399,47 +398,34 @@ bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel
     return false;
 }
 
-void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel) {
-
-    int questionNumber = 0; // Current question number
-    int LevelRange = LEVEL_RANGE; // turns it into a variable that later is used to check for equality
-
-
+void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange) {
     if (totalCorrect >= 3) {
         mathLevel++;
-
-        LevelRange += LEVEL_RANGE;
+        levelRange += LEVEL_RANGE;
         totalCorrect = 0; // clears it for next level.
         totalIncorrect = 0; // clears it for next level.
 
-        questionNumber = 0; // Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 3
-
         cout << "You have Advanced to the next level" << endl;
         cout << " |----------------------------------|" << endl;
-        cout << " | NumUp: " << left << setw(26) << LevelRange << "|" << endl;
+        cout << " | NumUp: " << left << setw(26) << levelRange << "|" << endl;
         cout << " | LevelUp: " << left << setw(24) << mathLevel << "|" << endl;
         cout << " |----------------------------------|" << endl;
         cout << endl;
     }
     // leveling down
-    else if (totalIncorrect >= 3) {
-        if (LevelRange > LEVEL_RANGE) {
+    else if (totalIncorrect >= 1) {
+        //totalIncorrect >= 1(3 wrong each question = leveldown.| totalIncorrect >= 3(Get 3 questions wrong(9 trys) which levels down
+        if (levelRange > LEVEL_RANGE) {
             mathLevel--;
+            levelRange -= LEVEL_RANGE;
 
-            LevelRange -= LEVEL_RANGE;
-
-            totalCorrect = 0; // clears it for next level.
-            totalIncorrect = 0; // clears it for next level.
-            questionNumber = 0; // Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 2
-
-            cout << "You have Advanced down a level" << endl;
+            cout << "You have moved down a level" << endl;
             cout << " |----------------------------------|" << endl;
-            cout << " | NumDown: " << left << setw(24) << LevelRange << "|" << endl;
+            cout << " | NumDown: " << left << setw(24) << levelRange << "|" << endl;
             cout << " | LevelDown: " << left << setw(22) << mathLevel << "|" << endl;
             cout << " |----------------------------------|" << endl;
             cout << endl;
         }
-
         totalCorrect = 0; // clears total correct
         totalIncorrect = 0; // clears total incorrect
     }
