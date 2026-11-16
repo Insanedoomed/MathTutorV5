@@ -26,7 +26,7 @@ string GetUserName();
 
 int GetNumericValue();
 
-string AskToPlayAgain();
+string AskToPlayAgain(string userName);
 
 void DisplaySummaryReport(const vector<vector<int> > &questions);
 
@@ -143,7 +143,7 @@ int main() {
 
         getline(cin, userInput); // Clears user input
 
-        userInput = AskToPlayAgain();
+        userInput = AskToPlayAgain(userName);
     } while (userInput == "y" || userInput == "yes"); // User's answer to the yes or no
 
 
@@ -156,9 +156,11 @@ int main() {
 
     return 0;
 } // end of main
-//**********************************************************************************************************************
+//*********************************************************************************************************************
 //* Display the game intro and some jokes
-// * ********************************************************************************************************************
+//* Params:
+//* Return: N/A
+// ********************************************************************************************************************
 void DisplayGameIntro() {
     //Display the program's header
     cout <<
@@ -194,6 +196,11 @@ void DisplayGameIntro() {
     return;
 } // end of DisplayGameIntro
 
+//*********************************************************************************************************************
+//* Display the game intro and some jokes
+//* Params:
+// *Return: User's Name as a string
+// ********************************************************************************************************************
 string GetUserName() {
     string userName = "?";
     //obtaining user's name and welcoming the user
@@ -208,8 +215,14 @@ string GetUserName() {
     cout << endl;
     return userName;
 } // end of get userName
+
+//*********************************************************************************************************************
+//* Display the game intro and some jokes
+//* Params:
+// *Return: User's input as a number
+// ********************************************************************************************************************
 int GetNumericValue() {
-    int userAnswer;
+    int userAnswer = 0;
     //Start of Loop that loops until the user enters a valid input
     while (!(cin >> userAnswer)) {
         cin.clear(); // clears the cin error flag
@@ -219,7 +232,13 @@ int GetNumericValue() {
     }
     return userAnswer;
 } // end of loop that handles correct user data
-string AskToPlayAgain() {
+
+//*********************************************************************************************************************
+//* Asks if the user wants another question
+//* Params: string user's name
+// *Return: user's input (y, yes, n, no)
+// ********************************************************************************************************************
+string AskToPlayAgain(string userName) {
     string userInput = "?";
     while (true) {
         // asks the user if they want another question
@@ -232,12 +251,17 @@ string AskToPlayAgain() {
         // user chooses yes or no
         if (userInput == "y" || userInput == "yes" ||
             userInput == "n" || userInput == "no") {
-            return userInput;
         }
         cout << "Please enter y, yes, n, no" << endl;
     }
-}
+    return userInput;
+}// End of AskToPlayAgain
 
+//*********************************************************************************************************************
+//* Display the game intro and some jokes
+//* Params:
+// *Return:
+// ********************************************************************************************************************
 void DisplaySummaryReport(const vector<vector<int> > &questions) {
     int correctAns; // The correct answer
     int leftNum = 0; // 1st number
