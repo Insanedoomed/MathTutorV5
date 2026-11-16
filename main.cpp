@@ -28,7 +28,7 @@ int GetNumericValue();
 
 string AskToPlayAgain(string userName);
 
-void DisplaySummaryReport(const vector<vector<int> > &questions);
+void DisplaySummaryReport(const vector<vector<int>> &questions);
 
 bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol,
                        int rightNum, int correctAns, vector<int> &row);
@@ -144,18 +144,19 @@ int main() {
         getline(cin, userInput); // Clears user input
 
         userInput = AskToPlayAgain(userName);
+
     } while (userInput == "y" || userInput == "yes"); // User's answer to the yes or no
 
 
     DisplaySummaryReport(questions);
 
     cout << "Keep Calm and do math!" << endl; // closing messages printed outside the box
-
     cout << "This is MathTutorV4, thanks for playing!" << endl;
     cout << "Thank you this is all for now!" << endl;
 
     return 0;
 } // end of main
+
 //*********************************************************************************************************************
 //* Display the game intro and some jokes
 //* Params:
@@ -197,7 +198,7 @@ void DisplayGameIntro() {
 } // end of DisplayGameIntro
 
 //*********************************************************************************************************************
-//* Display the game intro and some jokes
+//* Asks the user's name
 //* Params:
 // *Return: User's Name as a string
 // ********************************************************************************************************************
@@ -217,7 +218,7 @@ string GetUserName() {
 } // end of get userName
 
 //*********************************************************************************************************************
-//* Display the game intro and some jokes
+//* makes sure the user enters a valid input
 //* Params:
 // *Return: User's input as a number
 // ********************************************************************************************************************
@@ -258,18 +259,18 @@ string AskToPlayAgain(string userName) {
 }// End of AskToPlayAgain
 
 //*********************************************************************************************************************
-//* Display the game intro and some jokes
+//* Display the summary report and grand totals
 //* Params:
-// *Return:
+// *Return: N/A
 // ********************************************************************************************************************
-void DisplaySummaryReport(const vector<vector<int> > &questions) {
-    int correctAns; // The correct answer
-    int leftNum = 0; // 1st number
-    int rightNum = 0; // 2nd number
-    int mathLevel = 1; // level
-    char mathSymbol; // {+, -, *, /}
-    int attempt = 0; // attempts it took (0 = failed)
+void DisplaySummaryReport(const vector<vector<int>> &questions) {
 
+    int mathLevel = 1; // level
+    int leftNum = 0; // 1st number
+    char mathSymbol; // {+, -, *, /}
+    int rightNum = 0; // 2nd number
+    int correctAns; // The correct answer
+    int attempt = 0; // attempts it took (0 = failed)
     int totalCorrect = 0;
     int totalIncorrect = 0;
     int totalQuestions = 0;
@@ -380,9 +381,13 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
         boxLine("There is work to be done! Grade: F", BOX_INNER);
         cout << border << endl;
     }
-}
+} // end of DisplaySummaryReport
 
-
+//*********************************************************************************************************************
+//* Display
+//* Params:
+// *Return:
+// ********************************************************************************************************************
 bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol,
                        int rightNum, int correctAns, vector<int> &row) {
     int userAnswer = 0;
@@ -422,6 +427,11 @@ bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel
     return false;
 }
 
+//*********************************************************************************************************************
+//* Display
+//* Params:
+// *Return:
+// ********************************************************************************************************************
 void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange) {
     if (totalCorrect >= 3) {
         mathLevel++;
