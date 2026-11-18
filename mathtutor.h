@@ -9,13 +9,16 @@ ASCII art and jokes, it then asks a simple math question which is checked for co
 and then it outputs an end of program message.
 ***********************************/
 
-ifndef MATHTUTOR_H;
+#ifndef MATHTUTOR_H
 #define MATHTUTOR_H
 
 #include <string> // for string data types
 #include <vector> // for storing the questions in a 2D vector
 
-using namespace std;
+using namespace std;\
+
+const int LEVEL_RANGE = 10; // Starting range of 1-10; adds ten each level up
+const int BOX_INNER = 40; // number of characters between the two | borders
 
 void DisplayGameIntro();
 string GetUserName();
@@ -27,4 +30,3 @@ string AskToPlayAgain(string userName);
 void DisplaySummaryReport(const vector<vector<int>> &questions);
 
 #endif
-
