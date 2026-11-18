@@ -28,7 +28,7 @@ void boxLine(const string &text, int width) {
 
 //*********************************************************************************************************************
 //* Display the game intro and some jokes
-//* Params:
+//* Params: none
 //* Return: N/A
 // ********************************************************************************************************************
 void DisplayGameIntro() {
@@ -68,7 +68,7 @@ void DisplayGameIntro() {
 
 //*********************************************************************************************************************
 //* Asks the user's name
-//* Params:
+//* Params: none
 // *Return: User's Name as a string
 // ********************************************************************************************************************
 string GetUserName() {
@@ -88,7 +88,7 @@ string GetUserName() {
 
 //*********************************************************************************************************************
 //* makes sure the user enters a valid input
-//* Params:
+//* Params: none
 // *Return: User's input as a number
 // ********************************************************************************************************************
 int GetNumericValue() {
@@ -121,18 +121,17 @@ string AskToPlayAgain(string userName) {
         if (userInput == "y" || userInput == "yes" ||
             userInput == "n" || userInput == "no") {
             return userInput;
-            }
+        }
         cout << "Please enter y, yes, n, no" << endl;
     }
-}// End of AskToPlayAgain
+} // End of AskToPlayAgain
 
 //*********************************************************************************************************************
 //* Display the summary report and grand totals
-//* Params:
+//* Params: const vector<vector<int> > &questions
 // *Return: N/A
 // ********************************************************************************************************************
-void DisplaySummaryReport(const vector<vector<int>> &questions) {
-
+void DisplaySummaryReport(const vector<vector<int> > &questions) {
     int mathLevel = 1; // level
     int leftNum = 0; // 1st number
     char mathSymbol; // {+, -, *, /}
@@ -249,12 +248,14 @@ void DisplaySummaryReport(const vector<vector<int>> &questions) {
         boxLine("There is work to be done! Grade: F", BOX_INNER);
         cout << border << endl;
     }
+    return;
 } // end of DisplaySummaryReport
 
 //*********************************************************************************************************************
-//* Display
-//* Params:
-// *Return:
+//* Display: This will display the Level you're on and tell you how many attempts you have out of how much you have left
+//and if you get it right or wrong and also print correct answer if you get all 3 wrong.
+//* Params: const string &userName, vector<int> &question
+// *Return:false
 // ********************************************************************************************************************
 bool GiveThreeAttempts(const string &userName, vector<int> &question) {
     int mathLevel = question.at(0);
@@ -273,7 +274,7 @@ bool GiveThreeAttempts(const string &userName, vector<int> &question) {
     for (int i = 1; i <= MAX_ATTEMPTS; i++) {
         // show the question inside a box
         ostringstream header;
-        header << "Level " << mathLevel << " - Attempt " << i << " of " << MAX_ATTEMPTS;
+        header << "Level " << mathLevel << " - Attempt " << i << " of " << MAX_ATTEMPTS << endl;
 
         cout << border << endl;
         boxLine(header.str(), BOX_INNER);
@@ -308,9 +309,10 @@ bool GiveThreeAttempts(const string &userName, vector<int> &question) {
 }
 
 //*********************************************************************************************************************
-//* Display
-//* Params:
-// *Return:
+//* Display: This Determines wether you level up or down. It will tell you what your num and level range goes up to and
+//down.
+//* Params: int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange
+// *Return: N/A
 // ********************************************************************************************************************
 void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange) {
     if (totalCorrect >= 3) {
@@ -343,10 +345,12 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
         totalCorrect = 0; // clears total correct
         totalIncorrect = 0; // clears total incorrect
     }
+    return;
 }
+
 //*********************************************************************************************************************
 //* Generates a random math question for the current level
-//* Params: current math level, highest number allowed in the question
+//* Params: int mathLevel, int levelRange
 //* Return: vector {mathLevel, leftNum, mathSymbol, rightNum, correctAns}
 //*********************************************************************************************************************
 vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
@@ -366,7 +370,8 @@ vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
             break;
 
         case MT_SUB:
-            if (leftNum < rightNum) { // keep the answer from being negative
+            if (leftNum < rightNum) {
+                // keep the answer from being negative
                 temp = leftNum;
                 leftNum = rightNum;
                 rightNum = temp;
@@ -392,7 +397,5 @@ vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
             cout << "Please report this error to Brayden Tolle or Barnabas Htoo" << endl;
             exit(-1);
     }
-
-    vector<int> question = {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
-    return question;
+    return {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
 } // end of GenerateRandomQuestions
