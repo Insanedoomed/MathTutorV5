@@ -30,10 +30,11 @@ string AskToPlayAgain(string userName);
 
 void DisplaySummaryReport(const vector<vector<int>> &questions);
 
-bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol,
-                       int rightNum, int correctAns, vector<int> &row);
+bool GiveThreeAttempts(const string &userName, vector<int> &question);
 
 void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange);
+
+vector<int> GenerateRandomQuestions(int mathLevel, int levelRange);
 
 void boxLine(const string &text, int width) {
     cout << " | " << left << setw(width - 2) << text << " |" << endl;
@@ -48,24 +49,13 @@ int main() {
     //initializing variables
     srand(time(0)); // Seed first; used to randomize the numeric operator (+,-,*,/)
 
-
-    enum MathType { MT_ADD = 1, MT_SUB = 2, MT_MUL = 3, MT_DIV = 4 }; // Our Enum for all the problems
-
-    MathType mathType = MT_ADD; // sets MathType to a one
+    vector<int> currentQuestion;
 
     vector<vector<int> > questions; // Vector for our tabel. Sets questions as a holder
 
-    int correctAns; // The correct answer
-
-    int rightNum = 0; // the 2nd random number between 1 and level change
-    int leftNum = 0; // the 1st random number between 1 and level change
-    int temp = 0; // Uses to swap two values
-
-    int questionNumber = 0; // Current question number
     int LevelRange = LEVEL_RANGE; // turns it into a variable that later is used to check for equality
 
     int mathLevel = 1; // Current Math level
-    char mathSymbol; // {+, -, *, /}
     int totalIncorrect = 0; // Current number of incorrect questions; used later for leveling down
     int totalCorrect = 0; // Current number of Correct questions; used for later for leveling up
 
@@ -81,63 +71,16 @@ int main() {
 
     // start of loop
     do {
-        questionNumber++; // each loop, it adds one to question each time the user responds yes
+        currentQuestion = GenerateRandomQuestions(mathLevel, LevelRange);
+        isCorrect = GiveThreeAttempts(userName, currentQuestion);
 
-        mathType = static_cast<MathType>(rand() % 4 + 1); //Turning into random
-
-        rightNum = ((rand() % LevelRange) + 1); // Value from 1-whatever level the user is
-        leftNum = ((rand() % LevelRange) + 1); // Value from 1-whatever level the user is
-
-
-        //Switch to calculate the correct answer and which math operator to display
-        switch (mathType) {
-            case MT_ADD: // addition
-                correctAns = leftNum + rightNum;
-                mathSymbol = '+';
-                break;
-
-            case MT_SUB: // subtraction
-                // Ensure the left number is the bigger one to avoid negatives
-                if (leftNum < rightNum) {
-                    temp = leftNum;
-                    leftNum = rightNum;
-                    rightNum = temp;
-                }
-                correctAns = leftNum - rightNum;
-                mathSymbol = '-';
-                break;
-
-            case MT_MUL: // multiplication
-                correctAns = leftNum * rightNum;
-                mathSymbol = '*';
-                break;
-
-            case MT_DIV: // division
-                // Build the dividend so the answer is always a whole number
-                correctAns = leftNum;
-                leftNum = leftNum * rightNum;
-                mathSymbol = '/';
-                break;
-
-            default: //error handling - should never happen
-                cout << "Invalid question type: " << mathType << endl;
-                cout << "Program ended with an error -1" << endl;
-                cout << "Please report this error to Brayden Tolle or Barnabas Htoo" << endl;
-                return -1;
-        } //End of the switch
-
-        //Storing the math level, left number, math symbol, right number, and correct answer
-        vector<int> row = {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
-
-        isCorrect = GiveThreeAttempts(userName, questionNumber, mathLevel, leftNum, mathSymbol, rightNum, correctAns,
-                                      row);
         if (isCorrect) {
             totalCorrect++;
         } else {
             totalIncorrect++;
         }
 
-        questions.push_back(row); // add the data of row to the end of the 2D vector
+        questions.push_back(currentQuestion);   // attempts already added inside GiveThreeAttempts
 
         CheckForLevelRangeChange(totalCorrect, totalIncorrect, mathLevel, LevelRange);
 
@@ -242,20 +185,19 @@ int GetNumericValue() {
 string AskToPlayAgain(string userName) {
     string userInput = "?";
     while (true) {
-        // asks the user if they want another question
         cout << "Would you like another question, Apprentice? (y=yes/n=no)" << endl;
         getline(cin, userInput);
 
         for (int i = 0; i < userInput.length(); i++) {
             userInput[i] = tolower(userInput[i]);
         }
-        // user chooses yes or no
+
         if (userInput == "y" || userInput == "yes" ||
             userInput == "n" || userInput == "no") {
-        }
+            return userInput;
+            }
         cout << "Please enter y, yes, n, no" << endl;
     }
-    return userInput;
 }// End of AskToPlayAgain
 
 //*********************************************************************************************************************
@@ -388,26 +330,37 @@ void DisplaySummaryReport(const vector<vector<int>> &questions) {
 //* Params:
 // *Return:
 // ********************************************************************************************************************
-bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel, int leftNum, char mathSymbol,
-                       int rightNum, int correctAns, vector<int> &row) {
+bool GiveThreeAttempts(const string &userName, vector<int> &question) {
+    int mathLevel = question.at(0);
+    int leftNum = question.at(1);
+    char mathSymbol = static_cast<char>(question.at(2));
+    int rightNum = question.at(3);
+    int correctAns = question.at(4);
+
+    ostringstream questionText;
+    questionText << leftNum << " " << mathSymbol << " " << rightNum;
+
+    string border = " |" + string(BOX_INNER, '-') + "|";
+
     int userAnswer = 0;
 
     for (int i = 1; i <= MAX_ATTEMPTS; i++) {
-        cout << " |----------------------------------|" << endl;
-        cout << " | Question: " << left << setw(23) << questionNumber << "|" << endl;
-        cout << " | Attempts: " << i << " out of " << left << setw(14) << MAX_ATTEMPTS << "|" << endl;
-        cout << " | MathLevel: " << left << setw(22) << mathLevel << "|" << endl;
-        cout << " |----------------------------------|" << endl;
-        cout << endl;
-        cout << userName << ", what is " << leftNum << " " << mathSymbol << " " << rightNum << "?" << endl;
-        cout << endl;
+        // show the question inside a box
+        ostringstream header;
+        header << "Level " << mathLevel << " - Attempt " << i << " of " << MAX_ATTEMPTS;
+
+        cout << border << endl;
+        boxLine(header.str(), BOX_INNER);
+        boxLine("What is " + questionText.str() + " ?", BOX_INNER);
+        cout << border << endl;
+        cout << userName << ", your answer: ";
 
         userAnswer = GetNumericValue();
 
         if (userAnswer == correctAns) {
             cout << "Good job! You Got The Question Right!" << endl;
             cout << endl;
-            row.push_back(i); // number of attempts it took
+            question.push_back(i); // attempts it took
             return true;
         }
 
@@ -415,15 +368,16 @@ bool GiveThreeAttempts(const string &userName, int questionNumber, int mathLevel
             cout << "Not quite, apprentice!" << endl;
             cout << endl;
         } else {
-            cout << "I'm So Disappointed In You Apprentice..." << endl;
-            cout << "You should've gotten that right..." << endl;
-            cout << " |----------------------------------|" << endl;
-            cout << " | CorrectAnswer: " << left << setw(18) << correctAns << "|" << endl;
-            cout << " |----------------------------------|" << endl;
+            // out of attempts: reveal the answer
+            cout << "The wizard is disappointed, " << userName << "..." << endl;
+            cout << border << endl;
+            boxLine("The correct answer was:", BOX_INNER);
+            boxLine(questionText.str() + " = " + to_string(correctAns), BOX_INNER);
+            cout << border << endl;
             cout << endl;
-            row.push_back(0); // 0 = out of attempts
         }
     }
+    question.push_back(0); // 0 = ran out of attempts
     return false;
 }
 
@@ -448,7 +402,7 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
     }
     // leveling down
     else if (totalIncorrect >= 1) {
-        //totalIncorrect >= 1(3 wrong each question = leveldown.| totalIncorrect >= 3(Get 3 questions wrong(9 trys) which levels down
+        // one question missed on all 3 attempts = level down (never below level 1)
         if (levelRange > LEVEL_RANGE) {
             mathLevel--;
             levelRange -= LEVEL_RANGE;
@@ -464,3 +418,55 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
         totalIncorrect = 0; // clears total incorrect
     }
 }
+//*********************************************************************************************************************
+//* Generates a random math question for the current level
+//* Params: current math level, highest number allowed in the question
+//* Return: vector {mathLevel, leftNum, mathSymbol, rightNum, correctAns}
+//*********************************************************************************************************************
+vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
+    enum MathType { MT_ADD = 1, MT_SUB = 2, MT_MUL = 3, MT_DIV = 4 };
+
+    MathType mathType = static_cast<MathType>(rand() % 4 + 1);
+    int rightNum = (rand() % levelRange) + 1; // 1 to levelRange
+    int leftNum = (rand() % levelRange) + 1; // 1 to levelRange
+    int temp = 0; // used to swap two values
+    int correctAns = 0;
+    char mathSymbol = '?';
+
+    switch (mathType) {
+        case MT_ADD:
+            correctAns = leftNum + rightNum;
+            mathSymbol = '+';
+            break;
+
+        case MT_SUB:
+            if (leftNum < rightNum) { // keep the answer from being negative
+                temp = leftNum;
+                leftNum = rightNum;
+                rightNum = temp;
+            }
+            correctAns = leftNum - rightNum;
+            mathSymbol = '-';
+            break;
+
+        case MT_MUL:
+            correctAns = leftNum * rightNum;
+            mathSymbol = '*';
+            break;
+
+        case MT_DIV:
+            correctAns = leftNum; // build the dividend so the answer is a whole number
+            leftNum = leftNum * rightNum;
+            mathSymbol = '/';
+            break;
+
+        default: // should never happen
+            cout << "Invalid question type: " << static_cast<int>(mathType) << endl;
+            cout << "Program ended with an error -1" << endl;
+            cout << "Please report this error to Brayden Tolle or Barnabas Htoo" << endl;
+            exit(-1);
+    }
+
+    vector<int> question = {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
+    return question;
+} // end of GenerateRandomQuestions
