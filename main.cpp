@@ -1,12 +1,25 @@
 /*****************************************************************************************************************************************************
 Program: MathTutorV4
-Programmers: Jacob Karsky, and Brayden Tolle
-Date: 10/30/2026
+Programmers: Jacob Karsky and Brayden Tolle
+Date: 11/13/2026
 Section 3: 12:00
 Github Repo:https://github.com/Insanedoomed/MathTutorV5
-Description: A wizard/magic themed math tutor that displays the intro featuring
-ASCII art and jokes, it then asks a simple math question which is checked for correctness
-and then it outputs an end of program message.
+Description: A wizard/magic themed math tutor for children
+
+* Displays the intro featuring ASCII art and jokes
+
+* Asks a simple math question which is checked for correctness
+
+* Gives the user 3 attempts to get the question right
+
+* After 3 correct answers the program levels up
+
+* If there are 3 incorrect answers in a row, the user levels down
+
+* Asks the user if they want to play again
+
+* Stores every math question and answer then displays it at the end in a summary report
+
 ****************************************************************************************************************************************************/
 #include <iostream> //required for cout and cin
 #include <ctime> // for time seeding
@@ -17,15 +30,16 @@ using namespace std; //sets standard namespace
 
 //start of the main function
 int main() {
-    //initializing variables
+
     srand(time(0)); // Seed first; used to randomize the numeric operator (+,-,*,/)
 
+    // used to store all the questions for a summary report
     vector<int> currentQuestion;
 
     vector<vector<int> > questions; // Vector for our tabel. Sets questions as a holder
 
+    //initializing variables
     int LevelRange = LEVEL_RANGE; // turns it into a variable that later is used to check for equality
-
     int mathLevel = 1; // Current Math level
     int totalIncorrect = 0; // Current number of incorrect questions; used later for leveling down
     int totalCorrect = 0; // Current number of Correct questions; used for later for leveling up
@@ -51,14 +65,13 @@ int main() {
             totalIncorrect++;
         }
 
-        questions.push_back(currentQuestion);   // attempts already added inside GiveThreeAttempts
+        questions.push_back(currentQuestion); // attempts already added inside GiveThreeAttempts
 
         CheckForLevelRangeChange(totalCorrect, totalIncorrect, mathLevel, LevelRange);
 
         getline(cin, userInput); // Clears user input
 
         userInput = AskToPlayAgain(userName);
-
     } while (userInput == "y" || userInput == "yes"); // User's answer to the yes or no
 
 
