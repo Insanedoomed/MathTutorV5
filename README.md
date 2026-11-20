@@ -1,4 +1,4 @@
-# Math Tutor VI
+# Math Tutor V
 
 <b>Table of Content</b>
 - [Summary](#summary)
@@ -15,8 +15,9 @@
   - [Leveling down, and show the correct answer](#leveling-down-and-show-the-correct-answer)
   - [Show the summary report if the user end the program](#show-the-summary-report-if-the-user-end-the-program)
   - [Show the Grade according to the correct score](#show-the-grade-according-to-the-correct-score)
+- [Function Names](#function-names)
 ## Summary
-Math Tutor V4 is an educational C++ program that presents users with a random math problem and
+Math Tutor V5 is an educational C++ program that presents users with a random math problem and
 checks their answer. The program interacts with users by asking for personal information, 
 sharing fun math facts, and providing encouraging feedback based on performance. 
 The program levels up the player if they get three right answers in a row. If they get 
@@ -74,5 +75,32 @@ total questions, correct answer, incorrect answer, and percentage for correct an
 
 ### Show the Grade according to the correct score
 ![](/images/grade.png)
+
+
+## Function Names
+#
+![](/images/functionDisplayGameIntro.png)
+- Displays the game intro and some jokes
+#
+![](/images/functionGetUserName.png)
+- Asks the user's name
+#
+![](/images/functionGetNumericValue.png)
+- Makes sure the user enters a valid input
+#
+![](/images/functionAskToPlayAgain.png)
+- Asks if the user wants another question
+#
+![](/images/functionDisplaySummaryReport.png)
+- Display the summary report and grand totals
+#
+![](/images/functionGiveThreeAttempts.png)
+- Displays the level you're on and how many attempts you have left
+#
+![](/images/functionCheckForLevelRangeChange.png)
+- Determines whether you level up or down
+#
+![](/images/functionGenerateRandomQuestions.png)
+- Generates a random math question for the current level
 
 [Back to Top](#math-tutor-vi)

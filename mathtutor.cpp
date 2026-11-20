@@ -328,7 +328,7 @@ bool GiveThreeAttempts(const string &userName, vector<int> &question,int questio
 }
 
 //*********************************************************************************************************************
-//* Display: This Determines wether you level up or down. It will tell you what your num and level range goes up to and
+//* Display: This Determines whether you level up or down. It will tell you what your num and level range goes up to and
 //down.
 //* Params: int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange
 // *Return: N/A
@@ -372,7 +372,7 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
 
 //*********************************************************************************************************************
 //* Generates a random math question for the current level
-//* Params: int mathLevel, int levelRange
+//* Params: int mathLevel used to control random number range
 //* Return: {mathLevel, leftNum, mathSymbol, rightNum, correctAns}
 //*********************************************************************************************************************
 vector<int> GenerateRandomQuestions(int mathLevel) {
