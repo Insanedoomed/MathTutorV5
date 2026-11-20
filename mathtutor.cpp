@@ -15,7 +15,7 @@ and then it outputs an end of program message.
 #include <limits> // for the use of numeric_limits
 #include <string> // for string data types
 #include <vector> // holds data
-#include <iomanip>
+#include <iomanip> //Adds for width issues for our box (We asked jesse how to)
 
 using namespace std;//sets standard namespace
 
@@ -358,14 +358,16 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
 //* Return: {mathLevel, leftNum, mathSymbol, rightNum, correctAns}
 //*********************************************************************************************************************
 vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
-    enum MathType { MT_ADD = 1, MT_SUB = 2, MT_MUL = 3, MT_DIV = 4 };
+    //int LevelRange = mathLevel + LEVEL_RANGE;
 
+    enum MathType { MT_ADD = 1, MT_SUB = 2, MT_MUL = 3, MT_DIV = 4 };
     MathType mathType = static_cast<MathType>(rand() % 4 + 1);
     int rightNum = (rand() % levelRange) + 1; // 1 to levelRange
     int leftNum = (rand() % levelRange) + 1; // 1 to levelRange
     int temp = 0; // used to swap two values
     int correctAns = 0;
     char mathSymbol = '?';
+
 
     switch (mathType) {
         case MT_ADD:
