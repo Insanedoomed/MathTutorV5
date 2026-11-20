@@ -19,10 +19,19 @@ using namespace std;//sets standard namespace
 
 const int LEVEL_RANGE = 10; // Starting range of 1-10; adds ten each level up
 const int BOX_INNER = 40; // number of characters between the two | borders
+const char* const INPUT_COLOR = "\033[96m"; // bright cyan; change the number for another color
+const char* const RESET_COLOR = "\033[0m";  // back to the normal console color
+const char* const BORDER_COLOR = "\033[93m"; // yellow: borders and info boxes
+const char* const ART_COLOR = "\033[95m";    // magenta: the ASCII art
+const char* const TEXT_COLOR = "\033[94m";   // bright blue: the wizard's talking
+const char* const GOOD_COLOR = "\033[92m";   // green: correct answers
+const char* const BAD_COLOR = "\033[91m";    // red: wrong answers
+
+void EnableAnsiColors(); // Prototype: Turns on color support in the Windows console
 
 void DisplayGameIntro(); // Prototype: Displays Game intro such as jokes and asterix
 string GetUserName();// Prototype: Gets the Username and Returns it so we have it
-vector<int> GenerateRandomQuestions(int mathLevel, int levelRange);// Prototype: Generates random question using random
+vector<int> GenerateRandomQuestions(int mathLevel);// Prototype: Generates random question using random
 int GetNumericValue();// Prototype: Handles user error. such as typing a character instead of a letter.
 bool GiveThreeAttempts(const string &userName, vector<int> &question,int questionNumber);// Prototype: Allows for 3 attempts for each question
 void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange);// Prototype: Determines if you will level down or not

@@ -31,6 +31,7 @@ using namespace std; //sets standard namespace
 //start of the main function
 int main() {
 
+    EnableAnsiColors(); // must run first, before any input or output
     srand(time(0)); // Seed first; used to randomize the numeric operator (+,-,*,/)
 
     // used to store all the questions for a summary report
@@ -61,7 +62,7 @@ int main() {
     do {
         questionNumber++; // adds 1 to each question in a level
 
-        currentQuestion = GenerateRandomQuestions(mathLevel, LevelRange); // current question's data: level, numbers, operator, answer, attempts used
+        currentQuestion = GenerateRandomQuestions(mathLevel); // current question's data: level, numbers, operator, answer, attempts used
 
         isCorrect = GiveThreeAttempts(userName, currentQuestion, questionNumber); // current isCorrect data: userName, currentQuestion, questionNumber
 
@@ -78,6 +79,7 @@ int main() {
 
         if (mathLevel != oldLevel) {   // level went up or down
             questionNumber = 0;        // next question will be #1
+            oldLevel = mathLevel;      // remember the new level so this only runs once per level change
         }
 
         getline(cin, userInput); // Clears user input

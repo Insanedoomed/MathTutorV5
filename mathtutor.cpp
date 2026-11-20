@@ -16,13 +16,18 @@ and then it outputs an end of program message.
 #include <string> // for string data types
 #include <vector> // holds data
 #include <iomanip> //Adds for width issues for our box (We asked jesse how to)
+#ifdef _WIN32
+#include <windows.h> // needed to turn on color codes in the Windows console
+#undef GetUserName   // windows.h renames GetUserName to GetUserNameA/W, which breaks our function
+#endif
 
 using namespace std;//sets standard namespace
 
 const int MAX_ATTEMPTS = 3; // Our max attempts; stays the same throughout program
 
-void boxLine(const string &text, int width) {
-    cout << " | " << left << setw(width - 2) << text << " |" << endl;
+void boxLine(const string &text, int width, const char* color = "") {
+    // the color is printed outside the padding so the escape codes don't break the box's width
+    cout << " | " << color << left << setw(width - 2) << text << RESET_COLOR << " |" << endl;
 }
 
 
@@ -33,11 +38,12 @@ void boxLine(const string &text, int width) {
 // ********************************************************************************************************************
 void DisplayGameIntro() {
     //Display the program's header
+    cout << BORDER_COLOR; // yellow border
     cout <<
             "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
             << endl;
-    cout << "                       {*} Welcome to the tower of the wizard of magical math tutoring! (V5) {*}" << endl;
-    cout << R"(
+    cout << TEXT_COLOR << "                       {*} Welcome to the tower of the wizard of magical math tutoring! (V5) {*}" << endl;
+    cout << ART_COLOR << R"(
 ,---.    ,---.   ____   ,---------. .---.  .---.    .--.      .--..-./`)  ____..--'   ____    .-------.     ______
 |    \  /    | .'  __ `.\          \|   |  |_ _|    |  |_     |  |\ .-.')|        | .'  __ `. |  _ _   \   |    _ `''.
 |  ,  \/  ,  |/   '  \  \`--.  ,---'|   |  ( ' )    | _( )_   |  |/ `-' \|   .-'  '/   '  \  \| ( ' )  |   | _ | ) _  \
@@ -51,18 +57,21 @@ void DisplayGameIntro() {
                                                                                                                                  )"
             << endl;
     //Display the program's jokes
+    cout << BORDER_COLOR; // yellow border
     cout <<
             "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
             << endl;
-    cout << R"(A wise wizards words:
+    cout << TEXT_COLOR << R"(A wise wizards words:
         (*) What's a wizard's favorite school subject? spell-gebra!
         (*) Why did the sorcerer break his calculator? He wanted to do math-a-magics in his head!
         (*) What is a witch's favorite shape? A Hex-agon!
         (*) What do you call a snake that is 3.14 feet long? A Pi-thon!)" << endl << endl;
 
+    cout << BORDER_COLOR; // yellow border
     cout <<
             "(*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*](*)[*]{*}[*]"
             << endl;
+    cout << RESET_COLOR;
     return;
 } // end of DisplayGameIntro
 
@@ -74,14 +83,16 @@ void DisplayGameIntro() {
 string GetUserName() {
     string userName = "?";
     //obtaining user's name and welcoming the user
-    cout << "What is your name young apprentice?" << endl;
+    cout << TEXT_COLOR << "What is your name young apprentice?" << RESET_COLOR << endl;
+    cout << INPUT_COLOR;
     getline(cin, userName); // handle for spaces in a person's name
+    cout << RESET_COLOR;
     cout << "" << endl;
     //math question and answer
-    cout << "Ah... " << userName <<
+    cout << TEXT_COLOR << "Ah... " << userName <<
             "! So you have finally found me. If you truly seek the knowledge hidden within these ancient halls," <<
             endl;
-    cout << " you must first prove your mind is sharp." << endl;
+    cout << " you must first prove your mind is sharp." << RESET_COLOR << endl;
     cout << endl;
     return userName;
 } // end of get userName
@@ -93,13 +104,17 @@ string GetUserName() {
 // ********************************************************************************************************************
 int GetNumericValue() {
     int userAnswer = 0;
+    cout << INPUT_COLOR; // what the user types shows up in color
     //Start of Loop that loops until the user enters a valid input
     while (!(cin >> userAnswer)) {
+        cout << RESET_COLOR; // error messages stay the normal color
         cin.clear(); // clears the cin error flag
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // ignores the max input, up to '\n'
-        cout << "Invalid answer apprentice!" << endl;
-        cout << "Please enter a number (like 1,2,3), Apprentice!" << endl;
+        cout << BAD_COLOR << "Invalid answer apprentice!" << endl;
+        cout << "Please enter a number (like 1,2,3), Apprentice!" << RESET_COLOR << endl;
+        cout << INPUT_COLOR; // color the next try
     }
+    cout << RESET_COLOR;
     return userAnswer;
 } // end of loop that handles correct user data
 
@@ -111,8 +126,10 @@ int GetNumericValue() {
 string AskToPlayAgain(string userName) {
     string userInput = "?";
     while (true) {
-        cout << "Would you like another question, Apprentice? (y=yes/n=no)" << endl;
+        cout << TEXT_COLOR << "Would you like another question, Apprentice? (y=yes/n=no)" << RESET_COLOR << endl;
+        cout << INPUT_COLOR;
         getline(cin, userInput);
+        cout << RESET_COLOR;
 
         for (int i = 0; i < userInput.length(); i++) {
             userInput[i] = tolower(userInput[i]);
@@ -122,7 +139,7 @@ string AskToPlayAgain(string userName) {
             userInput == "n" || userInput == "no") {
             return userInput;
         }
-        cout << "Please enter y, yes, n, no" << endl;
+        cout << BAD_COLOR << "Please enter y, yes, n, no" << RESET_COLOR << endl;
     }
 } // End of AskToPlayAgain
 
@@ -148,7 +165,7 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
 
     // ---------- Summary box ----------
 
-    boxLine("    Math Tutor Summary Report", BOX_INNER);
+    boxLine("    Math Tutor Summary Report", BOX_INNER, TEXT_COLOR);
     cout << border << endl;
     boxLine("", BOX_INNER);
     boxLine("Levels:    Questions       Attempts", BOX_INNER);
@@ -181,7 +198,7 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
             row << "Incorrect";
             totalIncorrect++;
         }
-        boxLine(row.str(), BOX_INNER); // read: pass the built-up text to boxLine
+        boxLine(row.str(), BOX_INNER, attempt != 0 ? GOOD_COLOR : BAD_COLOR); // green if correct, red if not // read: pass the built-up text to boxLine
     }
     // Calculates the final stats and prints them in a second section of the box, followed by the goodbye messages
     totalQuestions = questions.size(); // total questions asked = number of rows saved in the vector
@@ -191,16 +208,16 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
 
     ostringstream line; // reusable stream for building each totals row as text
     line << "Total Questions : " << totalQuestions;
-    boxLine(line.str(), BOX_INNER); // print the row inside the box
+    boxLine(line.str(), BOX_INNER, TEXT_COLOR); // print the row inside the box
     line.str(""); // clear the stream so the next row starts fresh
     line << "Total Correct   : " << totalCorrect;
-    boxLine(line.str(), BOX_INNER);
+    boxLine(line.str(), BOX_INNER, GOOD_COLOR);
     line.str("");
     line << "Total Incorrect : " << totalIncorrect;
-    boxLine(line.str(), BOX_INNER);
+    boxLine(line.str(), BOX_INNER, BAD_COLOR);
     line.str("");
     line << "Average Correct : " << average << "%";
-    boxLine(line.str(), BOX_INNER);
+    boxLine(line.str(), BOX_INNER, TEXT_COLOR);
 
     cout << border << endl; // bottom of the box
     cout << endl;
@@ -208,44 +225,44 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
     // Setting the different range average number to show different output accordingly
     if (average >= 95) {
         cout << border << endl;
-        boxLine("Fantastic apprentice Grade:A+", BOX_INNER);
+        boxLine("Fantastic apprentice Grade:A+", BOX_INNER, GOOD_COLOR);
         cout << border << endl;
         cout << endl;
     } else if (average >= 90) {
         cout << border << endl;
-        boxLine("Way to go apprentice! Grade:A", BOX_INNER);
+        boxLine("Way to go apprentice! Grade:A", BOX_INNER, GOOD_COLOR);
         cout << border << endl;
     } else if (average >= 85) {
         cout << border << endl;
-        boxLine("Nice apprentice! Way to work through Grade:B+", BOX_INNER);
+        boxLine("Nice apprentice! Grade:B+", BOX_INNER, GOOD_COLOR);
         cout << border << endl;
     } else if (average >= 80) {
         cout << border << endl;
-        boxLine("   Good Job apprentice Grade:B!", BOX_INNER);
+        boxLine("   Good Job apprentice Grade:B!", BOX_INNER, GOOD_COLOR);
         cout << border << endl;
     } else if (average >= 75) {
         cout << border << endl;
-        boxLine("Nice work apprentice! Grade:C+", BOX_INNER);
+        boxLine("Nice work apprentice! Grade:C+", BOX_INNER, BORDER_COLOR);
         cout << border << endl;
     } else if (average >= 70) {
         cout << border << endl;
-        boxLine("Way to power through! Grade:C", BOX_INNER);
+        boxLine("Way to power through! Grade:C", BOX_INNER, BORDER_COLOR);
         cout << border << endl;
     } else if (average >= 65) {
         cout << border << endl;
-        boxLine("Great job apprentice! Grade:D+", BOX_INNER);
+        boxLine("Great job apprentice! Grade:D+", BOX_INNER, BORDER_COLOR);
         cout << border << endl;
     } else if (average >= 60) {
         cout << border << endl;
-        boxLine("Good Work apprentice! Grade:D", BOX_INNER);
+        boxLine("Good Work apprentice! Grade:D", BOX_INNER, BORDER_COLOR);
         cout << border << endl;
     } else if (average >= 55) {
         cout << border << endl;
-        boxLine("Could be worse apprentice. Grade: F+", BOX_INNER);
+        boxLine("Could be worse apprentice. Grade: F+", BOX_INNER, BAD_COLOR);
         cout << border << endl;
     } else {
         cout << border << endl;
-        boxLine("There is work to be done! Grade: F", BOX_INNER);
+        boxLine("There is work to be done! Grade: F", BOX_INNER, BAD_COLOR);
         cout << border << endl;
     }
     return;
@@ -276,31 +293,32 @@ bool GiveThreeAttempts(const string &userName, vector<int> &question,int questio
     for (int i = 1; i <= MAX_ATTEMPTS && !isCorrect; i++) {
         // show the question inside a box
         ostringstream header;
+        cout << BORDER_COLOR; // yellow info box
         cout << " |----------------------------------|" << endl;
         cout << " | Question: " << left << setw(23) << questionNumber << "|" << endl;
         cout << " | Attempts: " << i << " out of " << left << setw(14) << MAX_ATTEMPTS << "|" << endl;;
         cout << " | MathLevel: " << left << setw(22) << mathLevel << "|" << endl;
         cout << " |----------------------------------|" << endl;
-        cout << endl;
-        cout << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << endl; // Asks question
+        cout << RESET_COLOR << endl;
+        cout << TEXT_COLOR << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << RESET_COLOR << endl; // Asks question
         cout << endl;
         userAnswer = GetNumericValue();
 
         if (userAnswer == correctAns) {
-            cout << "Good job! You Got The Question Right!" << endl;
+            cout << GOOD_COLOR << "Good job! You Got The Question Right!" << RESET_COLOR << endl;
             cout << endl;
             isCorrect = true;
             question.push_back(i); // attempts it took
             attemptused = i;
         } else if (i < MAX_ATTEMPTS) {
-            cout << "Not quite, apprentice!" << endl;
+            cout << BAD_COLOR << "Not quite, apprentice!" << RESET_COLOR << endl;
             cout << endl;
         } else {
             // out of attempts: reveal the answer
-            cout << "The wizard is disappointed, " << userName << "..." << endl;
+            cout << BAD_COLOR << "The wizard is disappointed, " << userName << "..." << RESET_COLOR << endl;
             cout << border << endl;
-            boxLine("The correct answer was:", BOX_INNER);
-            boxLine(questionText.str() + " = " + to_string(correctAns), BOX_INNER);
+            boxLine("The correct answer was:", BOX_INNER, GOOD_COLOR);
+            boxLine(questionText.str() + " = " + to_string(correctAns), BOX_INNER, GOOD_COLOR);
             cout << border << endl;
             cout << endl;
         }
@@ -324,11 +342,11 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
 
 
 
-        cout << "You have Advanced to the next level" << endl;
+        cout << GOOD_COLOR << "You have Advanced to the next level" << endl;
         cout << " |----------------------------------|" << endl;
         cout << " | NumUp: " << left << setw(26) << levelRange << "|" << endl;
         cout << " | LevelUp: " << left << setw(24) << mathLevel << "|" << endl;
-        cout << " |----------------------------------|" << endl;
+        cout << " |----------------------------------|" << RESET_COLOR << endl;
         cout << endl;
         int questionNumber = 0;// Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 3
     }
@@ -339,11 +357,11 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
             mathLevel--;
             levelRange -= LEVEL_RANGE;
 
-            cout << "You have moved down a level" << endl;
+            cout << BAD_COLOR << "You have moved down a level" << endl;
             cout << " |----------------------------------|" << endl;
             cout << " | NumDown: " << left << setw(24) << levelRange << "|" << endl;
             cout << " | LevelDown: " << left << setw(22) << mathLevel << "|" << endl;
-            cout << " |----------------------------------|" << endl;
+            cout << " |----------------------------------|" << RESET_COLOR << endl;
             cout << endl;
         }
         totalCorrect = 0; // clears total correct
@@ -357,8 +375,8 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
 //* Params: int mathLevel, int levelRange
 //* Return: {mathLevel, leftNum, mathSymbol, rightNum, correctAns}
 //*********************************************************************************************************************
-vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
-    //int LevelRange = mathLevel + LEVEL_RANGE;
+vector<int> GenerateRandomQuestions(int mathLevel) {
+    int levelRange = mathLevel * LEVEL_RANGE;
 
     enum MathType { MT_ADD = 1, MT_SUB = 2, MT_MUL = 3, MT_DIV = 4 };
     MathType mathType = static_cast<MathType>(rand() % 4 + 1);
@@ -405,3 +423,28 @@ vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
     }
     return {mathLevel, leftNum, mathSymbol, rightNum, correctAns};
 } // end of GenerateRandomQuestions
+//*********************************************************************************************************************
+//* Turns on ANSI color support for the Windows console (does nothing on other systems)
+//* Params: none
+//* Return: N/A
+//*********************************************************************************************************************
+void EnableAnsiColors() {
+#ifdef _WIN32
+    // turn on color codes for output
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD outMode = 0;
+    if (hOut != INVALID_HANDLE_VALUE && GetConsoleMode(hOut, &outMode)) {
+        SetConsoleMode(hOut, outMode | 0x0004); // 0x0004 = ENABLE_VIRTUAL_TERMINAL_PROCESSING
+    }
+
+    // stop mouse clicks from moving the cursor or pausing the program
+    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    DWORD inMode = 0;
+    if (hIn != INVALID_HANDLE_VALUE && GetConsoleMode(hIn, &inMode)) {
+        inMode |= ENABLE_EXTENDED_FLAGS;      // required to change the quick edit setting
+        inMode &= ~ENABLE_QUICK_EDIT_MODE;    // clicking no longer selects text or pauses output
+        inMode &= ~ENABLE_MOUSE_INPUT;        // mouse clicks are not sent to the program
+        SetConsoleMode(hIn, inMode);
+    }
+#endif
+} // end of EnableAnsiColors
