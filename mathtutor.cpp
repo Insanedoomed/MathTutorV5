@@ -17,7 +17,7 @@ and then it outputs an end of program message.
 #include <vector> // holds data
 #include <iomanip>
 
-using namespace std;
+using namespace std;//sets standard namespace
 
 const int MAX_ATTEMPTS = 3; // Our max attempts; stays the same throughout program
 
@@ -257,7 +257,7 @@ void DisplaySummaryReport(const vector<vector<int> > &questions) {
 //* Params: const string &userName, vector<int> &question
 // *Return:false
 // ********************************************************************************************************************
-bool GiveThreeAttempts(const string &userName, vector<int> &question) {
+bool GiveThreeAttempts(const string &userName, vector<int> &question,int questionNumber) {
     int mathLevel = question.at(0);
     int leftNum = question.at(1);
     char mathSymbol = static_cast<char>(question.at(2));
@@ -270,28 +270,29 @@ bool GiveThreeAttempts(const string &userName, vector<int> &question) {
     string border = " |" + string(BOX_INNER, '-') + "|";
 
     int userAnswer = 0;
+    int attemptused = 0;
+    bool isCorrect = false;
 
-    for (int i = 1; i <= MAX_ATTEMPTS; i++) {
+    for (int i = 1; i <= MAX_ATTEMPTS && !isCorrect; i++) {
         // show the question inside a box
         ostringstream header;
-        header << "Level " << mathLevel << " - Attempt " << i << " of " << MAX_ATTEMPTS << endl;
-
-        cout << border << endl;
-        boxLine(header.str(), BOX_INNER);
-        boxLine("What is " + questionText.str() + " ?", BOX_INNER);
-        cout << border << endl;
-        cout << userName << ", your answer: ";
-
+        cout << " |----------------------------------|" << endl;
+        cout << " | Question: " << left << setw(23) << questionNumber << "|" << endl;
+        cout << " | Attempts: " << i << " out of " << left << setw(14) << MAX_ATTEMPTS << "|" << endl;;
+        cout << " | MathLevel: " << left << setw(22) << mathLevel << "|" << endl;
+        cout << " |----------------------------------|" << endl;
+        cout << endl;
+        cout << userName << ", what is " << leftNum << mathSymbol << rightNum << "?" << endl; // Asks question
+        cout << endl;
         userAnswer = GetNumericValue();
 
         if (userAnswer == correctAns) {
             cout << "Good job! You Got The Question Right!" << endl;
             cout << endl;
+            isCorrect = true;
             question.push_back(i); // attempts it took
-            return true;
-        }
-
-        if (i < MAX_ATTEMPTS) {
+            attemptused = i;
+        } else if (i < MAX_ATTEMPTS) {
             cout << "Not quite, apprentice!" << endl;
             cout << endl;
         } else {
@@ -304,8 +305,8 @@ bool GiveThreeAttempts(const string &userName, vector<int> &question) {
             cout << endl;
         }
     }
-    question.push_back(0); // 0 = ran out of attempts
-    return false;
+    question.push_back(attemptused);   // attempts it took, or 0 if failed
+    return isCorrect;
 }
 
 //*********************************************************************************************************************
@@ -321,12 +322,15 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
         totalCorrect = 0; // clears it for next level.
         totalIncorrect = 0; // clears it for next level.
 
+
+
         cout << "You have Advanced to the next level" << endl;
         cout << " |----------------------------------|" << endl;
         cout << " | NumUp: " << left << setw(26) << levelRange << "|" << endl;
         cout << " | LevelUp: " << left << setw(24) << mathLevel << "|" << endl;
         cout << " |----------------------------------|" << endl;
         cout << endl;
+        int questionNumber = 0;// Sets the question to 0 to clear it for the new level. EX: question 1 out of LVL 3
     }
     // leveling down
     else if (totalIncorrect >= 1) {
@@ -351,7 +355,7 @@ void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathL
 //*********************************************************************************************************************
 //* Generates a random math question for the current level
 //* Params: int mathLevel, int levelRange
-//* Return: vector {mathLevel, leftNum, mathSymbol, rightNum, correctAns}
+//* Return: {mathLevel, leftNum, mathSymbol, rightNum, correctAns}
 //*********************************************************************************************************************
 vector<int> GenerateRandomQuestions(int mathLevel, int levelRange) {
     enum MathType { MT_ADD = 1, MT_SUB = 2, MT_MUL = 3, MT_DIV = 4 };

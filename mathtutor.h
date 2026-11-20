@@ -15,7 +15,7 @@ and then it outputs an end of program message.
 #include <string> // for string data types
 #include <vector> // for storing the questions in a 2D vector
 
-using namespace std;
+using namespace std;//sets standard namespace
 
 const int LEVEL_RANGE = 10; // Starting range of 1-10; adds ten each level up
 const int BOX_INNER = 40; // number of characters between the two | borders
@@ -24,7 +24,7 @@ void DisplayGameIntro(); // Prototype: Displays Game intro such as jokes and ast
 string GetUserName();// Prototype: Gets the Username and Returns it so we have it
 vector<int> GenerateRandomQuestions(int mathLevel, int levelRange);// Prototype: Generates random question using random
 int GetNumericValue();// Prototype: Handles user error. such as typing a character instead of a letter.
-bool GiveThreeAttempts(const string &userName, vector<int> &question);// Prototype: Allows for 3 attempts for each question
+bool GiveThreeAttempts(const string &userName, vector<int> &question,int questionNumber);// Prototype: Allows for 3 attempts for each question
 void CheckForLevelRangeChange(int &totalCorrect, int &totalIncorrect, int &mathLevel, int &levelRange);// Prototype: Determines if you will level down or not
 string AskToPlayAgain(string userName);// Prototype: A while true loop that asks if you want to play again if yes then it loops if no it ends
 void DisplaySummaryReport(const vector<vector<int>> &questions);// Prototype: A basic summaryReport of questions and attempts and answers.

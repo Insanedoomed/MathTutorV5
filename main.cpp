@@ -24,7 +24,7 @@ Description: A wizard/magic themed math tutor for children
 #include <iostream> //required for cout and cin
 #include <ctime> // for time seeding
 #include <sstream> // ostringstream
-#include "mathtutor.h"
+#include "mathtutor.h"// Includes the prototypes so we can call the functions
 
 using namespace std; //sets standard namespace
 
@@ -34,7 +34,7 @@ int main() {
     srand(time(0)); // Seed first; used to randomize the numeric operator (+,-,*,/)
 
     // used to store all the questions for a summary report
-    vector<int> currentQuestion;
+    vector<int> currentQuestion; // vector for the question we are on
 
     vector<vector<int> > questions; // Vector for our tabel. Sets questions as a holder
 
@@ -43,22 +43,29 @@ int main() {
     int mathLevel = 1; // Current Math level
     int totalIncorrect = 0; // Current number of incorrect questions; used later for leveling down
     int totalCorrect = 0; // Current number of Correct questions; used for later for leveling up
+    int questionNumber = 0; // To know what question number you're on (resets to 1 after each level)
+    int oldLevel = mathLevel; // remember the level before the check
+       // remember the level before the check;
 
     string border = " |" + string(BOX_INNER, '-') + "|"; // builds the box's top/bottom line: " |" + 40 dashes + "|"
     string userName; // User's name
-    string userInput = "?"; //User input
-    bool isCorrect = false;
+    string userInput = "?"; // User input
+    bool isCorrect = false;// true if the user answered the current question correctly within 3 attempts
 
-    DisplayGameIntro();
+    DisplayGameIntro();// Displays the Game intro
 
-    userName = GetUserName();
+    userName = GetUserName(); // Gets the username
 
 
     // start of loop
     do {
-        currentQuestion = GenerateRandomQuestions(mathLevel, LevelRange);
-        isCorrect = GiveThreeAttempts(userName, currentQuestion);
+        questionNumber++; // adds 1 to each question in a level
 
+        currentQuestion = GenerateRandomQuestions(mathLevel, LevelRange); // current question's data: level, numbers, operator, answer, attempts used
+
+        isCorrect = GiveThreeAttempts(userName, currentQuestion, questionNumber); // current isCorrect data: userName, currentQuestion, questionNumber
+
+        // if correct the add 1 to total correct then vise versa
         if (isCorrect) {
             totalCorrect++;
         } else {
@@ -67,7 +74,11 @@ int main() {
 
         questions.push_back(currentQuestion); // attempts already added inside GiveThreeAttempts
 
-        CheckForLevelRangeChange(totalCorrect, totalIncorrect, mathLevel, LevelRange);
+        CheckForLevelRangeChange(totalCorrect, totalIncorrect, mathLevel, LevelRange); // Determines if you level down or not
+
+        if (mathLevel != oldLevel) {   // level went up or down
+            questionNumber = 0;        // next question will be #1
+        }
 
         getline(cin, userInput); // Clears user input
 
