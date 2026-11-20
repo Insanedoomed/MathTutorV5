@@ -15,7 +15,7 @@ and then it outputs an end of program message.
 #include <limits> // for the use of numeric_limits
 #include <string> // for string data types
 #include <vector> // holds data
-#include <iomanip>
+#include <iomanip> //Adds for width issues for our box (We asked jesse how to)
 
 using namespace std;//sets standard namespace
 
