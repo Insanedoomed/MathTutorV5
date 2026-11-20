@@ -1,4 +1,4 @@
-# Math Tutor VI
+# Math Tutor V
 
 <b>Table of Content</b>
 - [Summary](#summary)
@@ -17,7 +17,7 @@
   - [Show the Grade according to the correct score](#show-the-grade-according-to-the-correct-score)
 - [Function Names](#function-names)
 ## Summary
-Math Tutor V4 is an educational C++ program that presents users with a random math problem and
+Math Tutor V5 is an educational C++ program that presents users with a random math problem and
 checks their answer. The program interacts with users by asking for personal information, 
 sharing fun math facts, and providing encouraging feedback based on performance. 
 The program levels up the player if they get three right answers in a row. If they get 
